@@ -113,7 +113,7 @@ raspi-config:	raspbian-config raspi-boot-config
 system-access:
 	mkdir -p /home/pi/.ssh
 	cp ./config_files/user/authorized_keys.danwand /home/pi/.ssh/authorized_keys
-	cp ./config_files/user/authorized_keys.danwand /etc/ssh/ssh_known_hosts
+	#cp ./config_files/user/authorized_keys.danwand /etc/ssh/ssh_known_hosts
 
 # debugging
 
@@ -155,14 +155,7 @@ user-alexander:
 
 debug: console debugtools user-peter
 
-# configuration of services
+# 
 
-
-# untestet
-
-
-
-
-	
 install: install-os raspi-config camera-util debug
 	@echo "All SW Installed"
