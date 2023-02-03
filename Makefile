@@ -1,8 +1,11 @@
 #
 # Makefile for wand os configuration
 #
+# Installing all std software
+#
 # 220402	PLH		First version with config mode
 # 221231	PLH 	Dividet in OS config and Wand service
+# 230201	PLH		Updated
 
 default:
 	@echo "make install\tinstall sw and set default config"
@@ -13,19 +16,11 @@ help :
 	@echo "Use the following commands:\n"
 	@echo "make \tinstall\tinstall all required basis sw"
 	@echo "make debug\tdebug users and console"
-	@echo "make console\tConfigure console for hdmi and keyboard for DK"
-	@echo "make camera-util\tInstall camera dt-blop"
 	@echo "--"
 	@echo "make debugtools\tinstall debug sw"
 
-ipv6_disable:
-	# virker ikke
-	cp config_files/syscntl/local.conf /etc/syscntl.d/local.conf
-	@echo ipv6 is disabled
-
-apt-update-no:
-	systemctl disable apt-daily.timer
-	systemctl disable apt-daily-upgrade.timer
+pull:
+	git pull --rebase=false
 
 # standard linux services
 
@@ -58,15 +53,26 @@ apache:
 python:
 	apt -y install python3-pip python3-systemd
 
-config-os:	ipv6_disable
-	@echo "Configure os"
-	#/usr/sbin/locale-gen
 
 # install all std sw 
 
 install-os:	hostapd dnsmasq apache python
-	@echo "Installing extra sw"
+	@echo "Installing all std system sw"
 
+# std debian system optimization
+
+ipv6_disable:
+	# virker ikke
+	cp config_files/syscntl/local.conf /etc/syscntl.d/local.conf
+	@echo ipv6 is disabled
+
+apt-update-no:
+	systemctl disable apt-daily.timer
+	systemctl disable apt-daily-upgrade.timer
+
+system-opt:	ipv6_disable apt-update-no
+	@echo "Configure os"
+	#/usr/sbin/locale-gen
 
 # adjust raspian standard service
 
@@ -108,12 +114,6 @@ raspi-boot-config:
 
 raspi-config:	raspbian-config raspi-boot-config
 
-# system access
-
-system-access:
-	mkdir -p /home/pi/.ssh
-	cp ./config_files/user/authorized_keys.danwand /home/pi/.ssh/authorized_keys
-	#cp ./config_files/user/authorized_keys.danwand /etc/ssh/ssh_known_hosts
 
 # debugging
 
@@ -129,6 +129,13 @@ debugtools:
 	apt install -y aptitude
 	apt install -y avahi-utils
 	apt install -y tcpdump dnsutils
+
+# system access
+
+system-access:
+	mkdir -p /home/pi/.ssh
+	cp ./config_files/user/authorized_keys.danwand /home/pi/.ssh/authorized_keys
+	#cp ./config_files/user/authorized_keys.danwand /etc/ssh/ssh_known_hosts
 
 # users
 
