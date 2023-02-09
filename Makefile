@@ -27,6 +27,7 @@ pull:
 hostapd:
 	@echo "Installing hotspot"
 	rfkill unblock wlan
+	test -d /etc/hostapd/ || mkdir /etc/hostapd/
 	cp ./config_files/hostapd/hostapd.conf /etc/hostapd/hostapd.conf
 	apt -y install hostapd
 	systemctl stop hostapd
