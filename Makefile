@@ -16,6 +16,7 @@ help :
 	@echo "Use the following commands:\n"
 	@echo "make \tinstall\tinstall all required basis sw"
 	@echo "make debug\tdebug users and console"
+	@echo "make locale\tRerun debian locale config"
 	@echo "--"
 	@echo "make debugtools\tinstall debug sw"
 
@@ -73,6 +74,10 @@ apt-update-no:
 system-opt:	ipv6_disable apt-update-no
 	@echo "Configure os"
 	#/usr/sbin/locale-gen
+
+locale:
+	export LC_ALL="en_GB.UTF-8"
+	dpkg-reconfigure locales
 
 # adjust raspian standard service
 
