@@ -28,9 +28,10 @@ pull:
 hostapd:
 	@echo "Installing hotspot"
 	rfkill unblock wlan
+	test -d /etc/hostapd/ || mkdir /etc/hostapd/
+	cp ./config_files/hostapd/hostapd.conf /etc/hostapd/hostapd.conf
 	apt -y install hostapd
 	systemctl stop hostapd
-	cp ./config_files/hostapd/hostapd.conf /etc/hostapd/hostapd.conf
 	systemctl unmask hostapd
 	systemctl disable hostapd
 
@@ -106,16 +107,6 @@ raspbian-config:
 raspi-boot-config:
 	@echo "configure with raspi-config"
 	raspi-config nonint do_legacy 0
-	#raspi-config nonint do_hostname danwand
-	#@echo "GPU memmory"
-	#vcgencmd get_mem gpu
-	# 512 M  => max 384
-	#vcgencmd get_config hdmi_mode
-	#vcgencmd get_config disable_camera_led
-
-	#raspi-config nonint do_boot_behaviour B1
-	#raspi-config nonint do_camera 0
-	#raspi-config nonint do_i2c 0
 
 raspi-config:	raspbian-config raspi-boot-config
 
